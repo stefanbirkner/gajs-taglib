@@ -1,5 +1,6 @@
 package com.github.stefanbirkner.gajs4java.taglib;
 
+import static com.github.stefanbirkner.gajs4java.core.model.AnalyticsScript.STANDARD;
 import static com.github.stefanbirkner.gajs4java.core.model.Protocol.DECIDE_BY_JAVASCRIPT;
 import static com.github.stefanbirkner.gajs4java.core.util.ProtocolUtil.finalProtocolForRequestAndBaseProtocol;
 
@@ -10,12 +11,18 @@ import javax.servlet.ServletRequest;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
+import com.github.stefanbirkner.gajs4java.core.model.AnalyticsScript;
 import com.github.stefanbirkner.gajs4java.core.model.Protocol;
-import com.github.stefanbirkner.gajs4java.core.render.InsertGaJsRenderer;
+import com.github.stefanbirkner.gajs4java.core.render.LoadAnalyticsScriptRenderer;
 
 public class InsertGaJsTag extends SimpleTagSupport {
-	private static final InsertGaJsRenderer RENDERER = new InsertGaJsRenderer();
+	private static final LoadAnalyticsScriptRenderer RENDERER = new LoadAnalyticsScriptRenderer();
+	private AnalyticsScript analyticsScript = STANDARD;
 	private Protocol protocol = DECIDE_BY_JAVASCRIPT;
+
+	public void setAnalyticsScript(AnalyticsScript analyticsScript) {
+		this.analyticsScript = analyticsScript;
+	}
 
 	public void setProtocol(Protocol protocol) {
 		this.protocol = protocol;
@@ -26,7 +33,8 @@ public class InsertGaJsTag extends SimpleTagSupport {
 		Writer w = getJspContext().getOut();
 		Protocol finalProtocol = finalProtocolForRequestAndBaseProtocol(
 				request(), protocol);
-		RENDERER.writeGaJsInsertStatementToWriter(w, finalProtocol);
+		RENDERER.writeScriptLoadingCodeToWriter(w, finalProtocol,
+				analyticsScript);
 	}
 
 	private ServletRequest request() {

@@ -1,5 +1,6 @@
 package com.github.stefanbirkner.gajs4java.taglib;
 
+import static com.github.stefanbirkner.gajs4java.core.model.AnalyticsScript.STANDARD;
 import static com.github.stefanbirkner.gajs4java.core.model.CommandForTrackerUtil.wrapCommandsForDefaultTracker;
 import static com.github.stefanbirkner.gajs4java.core.model.Protocol.DECIDE_BY_JAVASCRIPT;
 import static com.github.stefanbirkner.gajs4java.core.util.ProtocolUtil.finalProtocolForRequestAndBaseProtocol;
@@ -12,6 +13,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
+import com.github.stefanbirkner.gajs4java.core.model.AnalyticsScript;
 import com.github.stefanbirkner.gajs4java.core.model.CommandForTracker;
 import com.github.stefanbirkner.gajs4java.core.model.Protocol;
 import com.github.stefanbirkner.gajs4java.core.model.SetAccount;
@@ -21,12 +23,17 @@ import com.github.stefanbirkner.gajs4java.core.render.TrackingConfigurationRende
 
 public class TrackPageviewTag extends SimpleTagSupport {
 	private static final TrackingConfigurationRenderer RENDERER = new TrackingConfigurationRenderer();
+	private AnalyticsScript analyticsScript = STANDARD;
 	private Protocol protocol = DECIDE_BY_JAVASCRIPT;
 	private String account;
 	private String pageUrl;
 
 	public void setAccount(String account) {
 		this.account = account;
+	}
+
+	public void setAnalyticsScript(AnalyticsScript analyticsScript) {
+		this.analyticsScript = analyticsScript;
 	}
 
 	public void setPageUrl(String pageUrl) {
@@ -42,7 +49,7 @@ public class TrackPageviewTag extends SimpleTagSupport {
 		Protocol finalProtocol = finalProtocolForRequestAndBaseProtocol(
 				request(), protocol);
 		TrackingConfiguration configuration = new TrackingConfiguration(
-				commands(), finalProtocol);
+				commands(), finalProtocol, analyticsScript);
 		Writer writer = getJspContext().getOut();
 		RENDERER.writeTrackingConfigurationToWriter(configuration, writer);
 	}

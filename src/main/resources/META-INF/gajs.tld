@@ -15,6 +15,11 @@
 		<tag-class>com.github.stefanbirkner.gajs4java.taglib.InsertGaJsTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
+			<name>analyticsScript</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>protocol</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -29,6 +34,11 @@
 		<attribute>
 			<name>account</name>
 			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>analyticsScript</name>
+			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
